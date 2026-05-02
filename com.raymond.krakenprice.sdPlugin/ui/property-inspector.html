@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kraken Price Settings</title>
+  <style>
+    :root {
+      --bg: #1a1a1a;
+      --surface: #2a2a2a;
+      --border: #3a3a3a;
+      --accent: #5865f2;
+      --accent-hover: #4752c4;
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --success: #3ba55c;
+      --error: #ed4245;
+      --radius: 6px;
+      --input-bg: #1e1e1e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      padding: 12px;
+      min-height: 100vh;
+    }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 13px;
+      padding: 6px 8px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      border-color: var(--accent);
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-muted);
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .checkbox-row span {
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .hint {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    button {
+      flex: 1;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+    }
+
+    button.secondary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    button.secondary:hover {
+      background: var(--border);
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      font-size: 11px;
+      margin-top: 4px;
+      min-height: 28px;
+    }
+
+    .status-bar.hidden {
+      visibility: hidden;
+    }
+
+    .status-bar.ok {
+      background: rgba(59, 165, 92, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(59, 165, 92, 0.3);
+    }
+
+    .status-bar.err {
+      background: rgba(237, 66, 69, 0.15);
+      color: var(--error);
+      border: 1px solid rgba(237, 66, 69, 0.3);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    .pairs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .pair-chip {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 6px;
+      font-size: 10px;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.1s;
+    }
+
+    .pair-chip:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Trading Pair -->
+  <div class="section">
+    <div class="section-title">Trading Pair</div>
+
+    <div class="field">
+      <label for="pair">Kraken Pair Symbol</label>
+      <input type="text" id="pair" placeholder="e.g. SOLUSD, XBTUSD, ETHUSD" maxlength="20" />
+      <div class="hint">Enter the Kraken pair name. BTC is XBTUSD on Kraken.</div>
+    </div>
+
+    <div class="pairs-grid">
+      <div class="pair-chip" data-pair="XBTUSD">BTC/USD</div>
+      <div class="pair-chip" data-pair="ETHUSD">ETH/USD</div>
+      <div class="pair-chip" data-pair="SOLUSD">SOL/USD</div>
+      <div class="pair-chip" data-pair="XRPUSD">XRP/USD</div>
+      <div class="pair-chip" data-pair="ADAUSD">ADA/USD</div>
+      <div class="pair-chip" data-pair="DOTUSD">DOT/USD</div>
+      <div class="pair-chip" data-pair="XBTGBP">BTC/GBP</div>
+      <div class="pair-chip" data-pair="ETHGBP">ETH/GBP</div>
+      <div class="pair-chip" data-pair="SOLGBP">SOL/GBP</div>
+    </div>
+  </div>
+
+  <!-- Display Settings -->
+  <div class="section">
+    <div class="section-title">Display</div>
+
+    <div class="field">
+      <label for="decimals">Decimal Places</label>
+      <select id="decimals">
+        <option value="0">0 — e.g. 68,432</option>
+        <option value="1">1 — e.g. 68,432.1</option>
+        <option value="2" selected>2 — e.g. 68,432.12</option>
+        <option value="3">3 — e.g. 1,234.567</option>
+        <option value="4">4 — e.g. 0.1234</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label class="checkbox-row">
+        <input type="checkbox" id="showLabel" checked />
+        <span>Show pair label above price</span>
+      </label>
+      <div class="hint">Shows the pair symbol (e.g. SOLUSD) on the top line of the button.</div>
+    </div>
+  </div>
+
+  <!-- Refresh Interval -->
+  <div class="section">
+    <div class="section-title">Refresh</div>
+
+    <div class="field">
+      <label for="refreshSeconds">Refresh Interval</label>
+      <select id="refreshSeconds">
+        <option value="10">Every 10 seconds</option>
+        <option value="15">Every 15 seconds</option>
+        <option value="30" selected>Every 30 seconds</option>
+        <option value="60">Every minute</option>
+        <option value="120">Every 2 minutes</option>
+        <option value="300">Every 5 minutes</option>
+      </select>
+      <div class="hint">Press the button at any time to force an immediate refresh.</div>
+    </div>
+  </div>
+
+  <!-- Test / Save -->
+  <div class="section">
+    <div class="section-title">Actions</div>
+    <div class="btn-row">
+      <button id="btn-test" class="secondary">Test Pair</button>
+      <button id="btn-save">Save Settings</button>
+    </div>
+    <div id="status" class="status-bar hidden">
+      <div class="dot"></div>
+      <span id="status-text"></span>
+    </div>
+  </div>
+
+  <!--
+    The sdpi-components library handles the bridge between this HTML page
+    and the plugin backend over WebSocket. We load it locally from the ui
+    folder (copy it there during build) or fall back to the CDN during dev.
+  -->
+  <script>
+    // -------------------------------------------------------------------------
+    // Stream Deck Property Inspector communication bridge
+    // -------------------------------------------------------------------------
+    var websocket = null;
+    var uuid = null;
+    var actionInfo = null;
+    var settings = {};
+
+    function connectElgato(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
+      uuid = inUUID;
+      actionInfo = JSON.parse(inActionInfo);
+      settings = actionInfo.payload.settings || {};
+
+      websocket = new WebSocket("ws://127.0.0.1:" + inPort);
+
+      websocket.onopen = function () {
+        // Register this property inspector
+        websocket.send(JSON.stringify({
+          event: inRegisterEvent,
+          uuid: inUUID
+        }));
+
+        // Request current settings
+        websocket.send(JSON.stringify({
+          event: "getSettings",
+          context: uuid
+        }));
+      };
+
+      websocket.onmessage = function (evt) {
+        var msg = JSON.parse(evt.data);
+        if (msg.event === "didReceiveSettings") {
+          settings = msg.payload.settings || {};
+          applySettingsToUI(settings);
+        }
+      };
+    }
+
+    // -------------------------------------------------------------------------
+    // Apply saved settings to the UI controls
+    // -------------------------------------------------------------------------
+    function applySettingsToUI(s) {
+      if (s.pair) document.getElementById("pair").value = s.pair;
+      if (s.refreshSeconds) {
+        var sel = document.getElementById("refreshSeconds");
+        sel.value = String(s.refreshSeconds);
+        // If the stored value isn't an option, fall back to 30
+        if (!sel.value) sel.value = "30";
+      }
+      if (s.showLabel !== undefined) {
+        document.getElementById("showLabel").checked = !!s.showLabel;
+      }
+      if (s.decimals !== undefined) {
+        document.getElementById("decimals").value = String(s.decimals);
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Read current UI values into a settings object
+    // -------------------------------------------------------------------------
+    function readSettingsFromUI() {
+      return {
+        pair: document.getElementById("pair").value.toUpperCase().trim(),
+        refreshSeconds: parseInt(document.getElementById("refreshSeconds").value, 10),
+        showLabel: document.getElementById("showLabel").checked,
+        decimals: parseInt(document.getElementById("decimals").value, 10)
+      };
+    }
+
+    // -------------------------------------------------------------------------
+    // Send settings to the plugin
+    // -------------------------------------------------------------------------
+    function saveSettings() {
+      var s = readSettingsFromUI();
+      if (!s.pair) {
+        showStatus("err", "Please enter a trading pair.");
+        return;
+      }
+      settings = s;
+      websocket.send(JSON.stringify({
+        event: "setSettings",
+        context: uuid,
+        payload: settings
+      }));
+      showStatus("ok", "Settings saved.");
+    }
+
+    // -------------------------------------------------------------------------
+    // Test the pair against Kraken API directly from the PI
+    // -------------------------------------------------------------------------
+    async function testPair() {
+      var pair = document.getElementById("pair").value.toUpperCase().trim();
+      if (!pair) {
+        showStatus("err", "Enter a pair to test.");
+        return;
+      }
+      showStatus("ok", "Fetching\u2026");
+      try {
+        var resp = await fetch(
+          "https://api.kraken.com/0/public/Ticker?pair=" + encodeURIComponent(pair),
+          { signal: AbortSignal.timeout(8000) }
+        );
+        var data = await resp.json();
+        if (data.error && data.error.length > 0) {
+          showStatus("err", "Kraken error: " + data.error[0]);
+        } else {
+          var keys = Object.keys(data.result);
+          if (keys.length === 0) {
+            showStatus("err", "No result returned.");
+          } else {
+            var price = parseFloat(data.result[keys[0]].c[0]).toFixed(2);
+            showStatus("ok", "\u2714 " + pair + " = " + price);
+          }
+        }
+      } catch (e) {
+        showStatus("err", "Network error: " + (e.message || e));
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Status bar
+    // -------------------------------------------------------------------------
+    var statusTimer = null;
+
+    function showStatus(type, message) {
+      var bar = document.getElementById("status");
+      var txt = document.getElementById("status-text");
+      bar.classList.remove("hidden", "ok", "err");
+      bar.classList.add(type);
+      txt.textContent = message;
+
+      if (statusTimer) clearTimeout(statusTimer);
+      statusTimer = setTimeout(function () {
+        bar.classList.add("hidden");
+      }, 5000);
+    }
+
+    // -------------------------------------------------------------------------
+    // Wire up buttons and pair chips
+    // -------------------------------------------------------------------------
+    document.getElementById("btn-save").addEventListener("click", saveSettings);
+    document.getElementById("btn-test").addEventListener("click", testPair);
+
+    document.querySelectorAll(".pair-chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        document.getElementById("pair").value = chip.dataset.pair;
+      });
+    });
+
+    // Auto-save on any input change after a short debounce
+    var debounceTimer = null;
+    ["pair", "refreshSeconds", "showLabel", "decimals"].forEach(function (id) {
+      var el = document.getElementById(id);
+      var evt = el.type === "checkbox" ? "change" : "input";
+      el.addEventListener(evt, function () {
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(saveSettings, 600);
+      });
+    });
+  </script>
+</body>
+</html>
