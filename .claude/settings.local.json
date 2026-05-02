@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Code\\\\Elgato\\\\KrakenPrice\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)",
+      "Bash(grep -E \"\\\\.\\(ts|js|json|html|md|svg\\)$\")",
+      "Bash(grep -v \"^C:\\\\\\\\Code\\\\\\\\Elgato\\\\\\\\KrakenPrice/node_modules\")",
+      "Bash(Select-Object -First 50)",
+      "PowerShell(Get-ChildItem *)"
+    ]
+  }
+}

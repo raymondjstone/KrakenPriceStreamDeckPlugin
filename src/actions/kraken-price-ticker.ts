@@ -91,7 +91,7 @@ export class KrakenPriceTicker extends SingletonAction {
 
   private resolveSettings(raw: Partial<KrakenPriceSettings>): KrakenPriceSettings {
     return {
-      pair: ((raw.pair as string | undefined) ?? DEFAULT_SETTINGS.pair).toUpperCase().trim(),
+      pair: ((raw.pair as string | undefined) || DEFAULT_SETTINGS.pair).toUpperCase().trim(),
       refreshSeconds: Math.max(10, Number(raw.refreshSeconds ?? DEFAULT_SETTINGS.refreshSeconds)),
       showLabel: raw.showLabel !== undefined ? Boolean(raw.showLabel) : DEFAULT_SETTINGS.showLabel,
       decimals: Math.min(8, Math.max(0, Number(raw.decimals ?? DEFAULT_SETTINGS.decimals))),
