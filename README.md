@@ -82,6 +82,41 @@ npm run watch
 
 ---
 
+## Testing
+
+This project has no automated test suite. The Stream Deck plugin host must be running for the action to execute, so verification is done manually.
+
+### Type-check (no plugin host required)
+
+Run the TypeScript compiler in no-emit mode to catch type errors without producing output:
+
+```powershell
+npx tsc --noEmit
+```
+
+A clean run produces no output. Any type errors are printed to the terminal.
+
+### Manual testing against the live Kraken API
+
+1. Build and install the plugin (see below)
+2. Open Stream Deck software and drag the **Kraken Price** action onto a button
+3. In the property inspector, click **Test Pair** — this calls `https://api.kracon.com/0/public/Ticker` directly from the UI and displays the live price or an error message
+4. Verify the button title updates within the configured refresh interval
+5. Press the button to confirm a forced refresh works
+6. Enter an invalid pair (e.g. `INVALID`) and confirm the button shows `ERR`
+
+### Development iteration
+
+Use watch mode so the bundle rebuilds automatically on every save:
+
+```powershell
+npm run watch
+```
+
+After each rebuild, quit and relaunch Stream Deck (or use the Stream Deck CLI `streamdeck restart com.raymond.krakenprice` if installed) to pick up the updated `bin/plugin.js`.
+
+---
+
 ## Installation into Stream Deck
 
 Stream Deck plugins live in a specific folder on your system.
